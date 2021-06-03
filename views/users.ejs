@@ -1,0 +1,80 @@
+<html>
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"
+  />
+
+  <!-- 부가적인 테마 -->
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"
+  />
+
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
+  <body>
+    <div class="container">
+      <ul class="nav nav-tabs">
+        <li role="presentation"><a href="/page/rooms">Rooms</a></li>
+        <li role="presentation" class="active"><a href="/page/users">Users</a></li>
+        <li role="presentation"><a href="/page/friends1">Friends</a></li>
+        <li role="presentation"><a href="/logout">Logout</a></li>
+      </ul>
+      <br />
+      <br />
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>유저id</th>
+            <th>가입날짜</th>
+            <th>친구 수</th>
+            <th>친구요청</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (var i = 0;i < data.length;i++){ %>
+            <% if(userID !== data[i].str){ %>
+          <tr>
+            <td><%= data[i].str %></td>
+            <td><%= data[i].created %></td>
+            <td><%= data[i].friendNumber %></td>
+            <% if(data[i].isFriend){ %>
+            <td>
+              <span>이미 친구</span>
+            </td>
+            <%} else if(data[i].isSend){ %>
+            <td>
+              <span>친구신청 대기중</span>
+            </td>
+
+            <% }else{ %>
+            <td>
+              <form action="/following" method="post">
+                <input type="hidden" name="uid" value="<%= data[i].str %>" />
+                <input type="submit" value="친구신청" />
+              </form>
+            </td>
+            <% } %>
+          </tr>
+            <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  <script>
+    $(() => {
+      $('#follow').click(() => {
+        console.log('d');
+        // const name = $(this).attr('name');
+        // console.log(name);
+      });
+    });
+  </script>
+</html>

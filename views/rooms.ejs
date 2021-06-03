@@ -1,0 +1,51 @@
+<html>
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"
+  />
+
+  <!-- 부가적인 테마 -->
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"
+  />
+
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <body>
+    <div class="container">
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="/page/rooms">Rooms</a></li>
+        <li role="presentation"><a href="/page/users">Users</a></li>
+        <li role="presentation"><a href="/page/friends1">Friends</a></li>
+        <li role="presentation"><a href="/logout">Logout</a></li>
+      </ul>
+      <br />
+      <br />
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>방번호</th>
+              <th>참여인원</th>
+              <th>클릭시 입장</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (var i = 0;i < data.length;i++){ %>
+            <tr>
+              <td><%= data[i].idx %>번방</td>
+              <td><%= joinedUserNumbers[i] %>명 참여</td>
+              <td>
+                <a href="/page/chat/<%= data[i].idx %>">입장</a>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

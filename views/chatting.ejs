@@ -1,0 +1,135 @@
+<html>
+<link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"
+/>
+
+<!-- 부가적인 테마 -->
+<link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"
+/>
+
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font: 13px Helvetica, Arial;
+      }
+
+      form {
+        background: #000;
+        padding: 3px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      form input {
+        border: 0;
+        padding: 10px;
+        width: 90%;
+        margin-right: 0.5%;
+      }
+
+      form button {
+        width: 9%;
+        background: rgb(130, 224, 255);
+        border: none;
+        padding: 10px;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      #messages li {
+        padding: 5px 10px;
+      }
+
+      #messages li:nth-child(odd) {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+<!--  <ul class="nav nav-tabs">-->
+<!--    <li role="presentation" class="active"><a href="/page/rooms">Rooms</a></li>-->
+<!--    <li role="presentation"><a href="/page/users">Users</a></li>-->
+<!--    <li role="presentation"><a href="/page/friends1">Friends</a></li>-->
+<!--    <li role="presentation"><a href="/logout">Logout</a></li>-->
+<!--  </ul>-->
+    <h1>
+      <span id="userId"><%= userId %></span>의
+      <span id="roomId"><%= roomId %></span>번방
+    </h1>
+    <br/>
+    <h3>현재 인원 : <%= joinedUsers.length +1 %></h3>
+    <ul>
+      <% for (var i = 0;i < joinedUsers.length;i++){ %>
+        <li><%= joinedUsers[i].userId %></li>
+      <% } %>
+      <li><%= userId %></li>
+    </ul>
+    <br/>
+    <button id="exit">나가기</button>
+
+
+
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" />
+      <button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js">
+
+    </script>
+
+    <script>
+      $(() => {
+        let name = '<%= userId %>';
+        let roomId = '<%= roomId %>';
+        const socket = io();
+
+        socket.emit('joinRoom', roomId, name);
+
+        $('#exit').click(() => {
+          socket.emit('leaveRoom', roomId, name);
+          location.replace('/page/rooms');
+        });
+
+        $('form').submit(() => {
+          socket.emit('chat message', roomId, name, $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+
+        socket.on('chat message', (name, msg) => {
+          $('#messages').append($('<li>').text(name + '  :  ' + msg));
+        });
+
+        socket.on('leaveRoom', (roomId, name) => {
+          $('#messages').append(
+            $('<li>').text(name + '    가 ' + roomId + ' room 떠남' + ' :(')
+          );
+        });
+
+        socket.on('joinRoom', (num, name) => {
+          $('#messages').append(
+            $('<li>').text(name + '    가 ' + roomId + ' room 입장' + ':)')
+          );
+        });
+      });
+    </script>
+  </body>
+</html>
